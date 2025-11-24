@@ -33,3 +33,14 @@ if __name__ == "__main__":
     precio_usd = 100.00
     precio_eur = convertir(precio_usd, "EUR", tasas)
     registrar_transaccion("Laptop", precio_eur, "EUR", "logs/historial.txt")
+
+def actualizar_tasas(ruta):
+    # Simular API: Cambiar tasas aleatoriamente ±2%
+    with open(ruta, "r+", encoding="utf-8") as archivo:
+        tasas = json.load(archivo)
+        for moneda in tasas["USD"]:
+            tasas["USD"][moneda] *= 0.98 + (0.04 * random.random())
+        tasas["actualizacion"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        archivo.seek(0)
+        json.dump(tasas, archivo, indent=2, ensure_ascii=False)
+        archivo.truncate()
